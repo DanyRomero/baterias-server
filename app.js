@@ -23,6 +23,9 @@ app.use("/api", allRoutes);
 const marcas = require("./routes/marcas.routes");
 app.use("/marcas", marcas);
 
+const batteries = require("./routes/batteries.routes");
+app.use("/baterias", batteries);
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

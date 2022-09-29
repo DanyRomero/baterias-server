@@ -108,14 +108,14 @@ router.post("/login", isLoggedOut, (req, res, next) => {
   if (!username) {
     return res
       .status(400)
-      .json({ errorMessage: "Please provide your username." });
+      .json({ errorMessage: "Por favor ingrese su correo." });
   }
 
   // Here we use the same logic as above
   // - either length based parameters or we check the strength of a password
   if (password.length < 8) {
     return res.status(400).json({
-      errorMessage: "Your password needs to be at least 8 characters long.",
+      errorMessage: "La contraseña necesita al menos 8 caracteres.",
     });
   }
 
@@ -124,13 +124,13 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     .then((user) => {
       // If the user isn't found, send the message that user provided wrong credentials
       if (!user) {
-        return res.status(400).json({ errorMessage: "Wrong credentials." });
+        return res.status(400).json({ errorMessage: "Revisa tu información." });
       }
 
       // If user is found based on the username, check if the in putted password matches the one saved in the database
       bcrypt.compare(password, user.password).then((isSamePassword) => {
         if (!isSamePassword) {
-          return res.status(400).json({ errorMessage: "Wrong credentials." });
+          return res.status(400).json({ errorMessage: "Revisa tu información." });
         }
         Session.create({ user: user._id, createdAt: Date.now() }).then(
           (session) => {

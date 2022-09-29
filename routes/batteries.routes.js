@@ -1,21 +1,20 @@
 const router = require("express").Router();
 const mongoose = require("mongoose")
 
-const Brand = require('../models/Brand.model')
+const Battery = require('../models/Battery.model')
 
 router.post("/", (req,res) =>{
-  const {name} = req.body;
-  Brand.create({name})
-  .then((newBrand) => {
-    res.json(newBrand);
+  Battery.create(req.body)
+  .then((newBattery) => {
+    res.json(newBattery);
   })
   .catch((err) => console.log(err));
 })
 
 router.get("/", (req,res) =>{
-  Brand.find()
-  .then((brands) => {
-    res.json(brands);
+  Battery.find()
+  .then((battery) => {
+    res.json(battery);
   })
   .catch((err) => console.log(err));
 })
@@ -23,8 +22,8 @@ router.get("/", (req,res) =>{
 router.delete("/:id", (req,res) =>{
   const { id } = req.params;
   Brand.findByIdAndDelete(id)
-  .then((brands) => {
-    res.json(brands);
+  .then((battery) => {
+    res.json(battery);
   })
   .catch((err) => console.log(err));
 })
@@ -32,11 +31,15 @@ router.delete("/:id", (req,res) =>{
 router.put("/:id", (req,res) =>{
   const { id } = req.params;
   Brand.findByIdAndUpdate(id, req.body , {new:true})
-  .then((brands) => {
-    res.json(brands);
+  .then((battery) => {
+    res.json(battery);
   })
   .catch((err) => console.log(err));
 })
+
+
+
+
 
 
 module.exports = router;
