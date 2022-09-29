@@ -19,6 +19,11 @@ require("./config")(app);
 const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes);
 
+//registro de rutas
+const marcas = require("./routes/marcas.routes");
+app.use("/marcas", marcas);
+
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
