@@ -21,7 +21,7 @@ router.get("/", (req,res) =>{
 
 router.delete("/:id", (req,res) =>{
   const { id } = req.params;
-  Brand.findByIdAndDelete(id)
+  Battery.findByIdAndDelete(id)
   .then((battery) => {
     res.json(battery);
   })
@@ -30,7 +30,7 @@ router.delete("/:id", (req,res) =>{
 
 router.put("/:id", (req,res) =>{
   const { id } = req.params;
-  Brand.findByIdAndUpdate(id, req.body , {new:true})
+  Battery.findByIdAndUpdate(id, req.body , {new:true})
   .then((battery) => {
     res.json(battery);
   })
