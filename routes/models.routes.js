@@ -5,10 +5,9 @@ const Model = require("../models/Model.model");
 const Brand = require("../models/Brand.model");
 
 router.post("/", (req, res) => {
-  const { name, brandId } = req.body;
-  Model.create({ name, brand: brandId})
+  Model.create(req.body)
     .then((newModel) => {
-      return Brand.findByIdAndUpdate(brandId, { $push: { models: newModel._id } } );
+      return Brand.findByIdAndUpdate(newModel.brand, { $push: { models: newModel._id } } );
     })
     .then(response => res.json(response))
     .catch((err) => {

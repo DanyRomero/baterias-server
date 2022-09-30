@@ -7,7 +7,7 @@ const brandSchema = new Schema({
     required: true,
     unique: true
   },
-  model: [ { type: Schema.Types.ObjectId, ref: 'Models' },]
+  models: [ { type: Schema.Types.ObjectId, ref: 'Models' },]
 });
  
 module.exports = model('Brand', brandSchema);

@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
+
+const yearSchema = new Schema({
+  from: {
+    type: Number,
+    required: true
+  },
+  to: {
+    type: Number,
+    required: true
+  }
+});
  
 const modelSchema = new Schema({
   name: {
@@ -7,7 +18,7 @@ const modelSchema = new Schema({
     required: true,
     unique: true
   },
-  year: [ { type: Schema.Types.ObjectId, ref: 'Years' },],
+  years: [yearSchema],
   brand:{ type: Schema.Types.ObjectId, ref: 'Brand' }
 });
  
