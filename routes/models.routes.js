@@ -1,33 +1,35 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 
+const Model = require("../models/Model.model");
 const Brand = require("../models/Brand.model");
 
 router.post("/", (req, res) => {
-  const { name } = req.body;
-  Brand.create({ name })
-    .then((newBrand) => {
-      res.json(newBrand);
+  const { name, brandId } = req.body;
+  Model.create({ name, brand: brandId})
+    .then((newModel) => {
+      return Brand.findByIdAndUpdate(brandId, { $push: { models: newModel._id } } );
     })
+    .then(response => res.json(response))
     .catch((err) => {
-      res.status(422).json({ errors: err.errors });
-    });
+      res.status(422).json({ errors: err.errors })
+      });
 });
 
 router.get("/", (req, res) => {
-  Brand.find()
+  Model.find()
     .sort("name")
-    .then((brands) => {
-      res.json(brands);
+    .then((models) => {
+      res.json(models);
     })
     .catch((err) => console.log(err));
 });
 
 router.get("/:id", (req, res) => {
   const { id } = req.params;
-  Brand.findById(id)
-    .then((brand) => {
-      res.json(brand);
+  Model.findById(id)
+    .then((model) => {
+      res.json(model);
     })
     .catch((err) => {
       console.error(err);
@@ -37,18 +39,18 @@ router.get("/:id", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
-  Brand.findByIdAndDelete(id)
-    .then((brands) => {
-      res.json(brands);
+  Model.findByIdAndDelete(id)
+    .then((models) => {
+      res.json(models);
     })
     .catch((err) => console.log(err));
 });
 
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  Brand.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
-    .then((brands) => {
-      res.json(brands);
+  Model.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
+    .then((models) => {
+      res.json(models);
     })
     .catch((err) => {
       res.status(422).json({ errors: err.errors });
