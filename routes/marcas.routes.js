@@ -13,7 +13,7 @@ router.post("/", (req,res) =>{
 })
 
 router.get("/", (req,res) =>{
-  Brand.find()
+  Brand.find().sort("name")
   .then((brands) => {
     res.json(brands);
   })

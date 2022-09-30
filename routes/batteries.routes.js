@@ -12,7 +12,7 @@ router.post("/", (req,res) =>{
 })
 
 router.get("/", (req,res) =>{
-  Battery.find()
+  Battery.find().sort("name")
   .then((battery) => {
     res.json(battery);
   })
