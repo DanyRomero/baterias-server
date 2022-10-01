@@ -7,12 +7,14 @@ const Brand = require("../models/Brand.model");
 router.post("/", (req, res) => {
   Model.create(req.body)
     .then((newModel) => {
-      return Brand.findByIdAndUpdate(newModel.brand, { $push: { models: newModel._id } } );
-    })
-    .then(response => res.json(response))
-    .catch((err) => {
-      res.status(422).json({ errors: err.errors })
+      return Brand.findByIdAndUpdate(newModel.brand, {
+        $push: { models: newModel._id },
       });
+    })
+    .then((response) => res.json(response))
+    .catch((err) => {
+      res.status(422).json({ errors: err.errors });
+    });
 });
 
 router.get("/", (req, res) => {
@@ -32,7 +34,7 @@ router.get("/:id", (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(404).json({ error: 'Not found' });
+      res.status(404).json({ error: "Not found" });
     });
 });
 
@@ -50,6 +52,55 @@ router.put("/:id", (req, res) => {
   Model.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
     .then((models) => {
       res.json(models);
+    })
+    .catch((err) => {
+      res.status(422).json({ errors: err.errors });
+    });
+});
+
+//-------------------------------------------------------------------
+
+router.post("/:modelId/rangos", (req, res) => {
+  const { modelId } = req.params;
+  Model.findById(modelId)
+    .then((model) => {
+      model.years.push(req.body);
+      return model.save();
+    })
+    .then((newModel) => {
+      res.json(newModel);
+    })
+    .catch((err) => {
+      res.status(422).json({ errors: err.errors });
+    });
+});
+
+router.put("/:modelId/rangos/:id", (req, res) => {
+  const { modelId, id } = req.params;
+
+  Model.findById(modelId)
+    .then((model) => {
+      model.years.id(id).set(req.body);
+      return model.save();
+    })
+    .then((newModel) => {
+      res.json(newModel);
+    })
+    .catch((err) => {
+      res.status(422).json({ errors: err.errors });
+    });
+});
+
+router.delete("/:modelId/rangos/:id", (req, res) => {
+  const { modelId, id } = req.params;
+
+  Model.findById(modelId)
+    .then((model) => {
+      model.years.id(id).remove();
+      return model.save();
+    })
+    .then((newModel) => {
+      res.json(newModel);
     })
     .catch((err) => {
       res.status(422).json({ errors: err.errors });

@@ -4,7 +4,9 @@ const { Schema, model } = mongoose;
 const yearSchema = new Schema({
   from: {
     type: Number,
-    required: true
+    required: true,
+    maxlength: 4,
+    trim: true
   },
   to: {
     type: Number,
