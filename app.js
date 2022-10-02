@@ -20,14 +20,17 @@ const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes);
 
 //registro de rutas
-const marcas = require("./routes/marcas.routes");
-app.use("/marcas", marcas);
+const brands = require("./routes/brands.routes");
+app.use("/marcas", brands);
 
 const batteries = require("./routes/batteries.routes");
 app.use("/baterias", batteries);
 
 const models = require("./routes/models.routes");
 app.use("/modelos", models);
+
+const orders = require("./routes/orders.routes");
+app.use("/ordenes", orders);
 
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
