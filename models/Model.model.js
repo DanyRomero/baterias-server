@@ -1,27 +1,26 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
 const yearSchema = new Schema({
   from: {
     type: Number,
     required: true,
-    maxlength: 4,
-    trim: true
   },
   to: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
+  batteries: [{ type: Schema.Types.ObjectId, ref: "Battery" }],
 });
- 
+
 const modelSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   years: [yearSchema],
-  brand:{ type: Schema.Types.ObjectId, ref: 'Brand' }
+  brand: { type: Schema.Types.ObjectId, ref: "Brand" },
 });
- 
-module.exports = model('Model', modelSchema);
+
+module.exports = model("Model", modelSchema);

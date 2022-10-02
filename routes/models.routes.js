@@ -18,7 +18,9 @@ router.post("/", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  Model.find()
+  const {id} = req.query;
+ 
+  Model.find({ brand: id })
     .sort("name")
     .then((models) => {
       res.json(models);
