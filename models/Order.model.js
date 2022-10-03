@@ -9,6 +9,7 @@ const orderSchema = new Schema(
     battery: { type: Schema.Types.ObjectId, ref: "Battery" },
     client: { type: Schema.Types.ObjectId, ref: "Client" },
     address: { type: String },
+    
   },
   { timestamps: true }
 );

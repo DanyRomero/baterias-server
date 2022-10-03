@@ -13,11 +13,6 @@ const clientSchema = new Schema({
   },
   phone: {
     type: Number,
-  },
-  payment: {
-    type: String,
-    enum:['Efectivo', 'Terminal de Pago', 'Transferencia']
-
   }
 });
  
