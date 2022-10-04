@@ -17,35 +17,48 @@ router.get("/:id", (req, res) => {
   const { id } = req.params;
   Order.findById(id)
     .populate({
-      path: "model", 
+      path: "model",
       populate: {
         path: "years.batteries",
-      }
+      },
     })
     .populate(["brand", "battery"])
     .then((order) => res.json(order))
     .catch((err) => res.status(404).json({ error: "Not found" }));
 });
 
-
-router.put("/:id", (req,res)=>{
-  const {id} = req.params
-  Order.findByIdAndUpdate(id, req.body, {new:true} )
-  .then(order=> res.json(order))
-  .catch((err)=>{
-    res.status(422).json({ errors: err.errors })
-  })
-})
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  Order.findByIdAndUpdate(id, req.body, { new: true })
+    .then((order) => res.json(order))
+    .catch((err) => {
+      res.status(422).json({ errors: err.errors });
+    });
+});
 
 router.post("/:id/cliente", (req, res) => {
-  const {id} =req.params
+  const { id } = req.params;
   Client.create(req.body)
     .then((newClient) => {
-      return Order.findOneAndUpdate(id,{client: newClient}, {new:true})
+      const now = new Date();
+      return Order.findByIdAndUpdate(
+        id,
+        { client: newClient, completedAt: now },
+        { new: true }
+      );
     })
-    .then((response)=> res.json(response))
+    .then((response) => res.json(response))
     .catch((err) => {
       console.log(err);
+      res.status(422).json({ errors: err.errors });
+    });
+});
+
+router.get("/", (req, res) => {
+  Order.find({ completedAt: { $ne: null } }).sort("completedAt")
+    .populate(["brand", "battery", "client", "model", "year"])
+    .then((orders) => res.json(orders))
+    .catch((err) => {
       res.status(422).json({ errors: err.errors });
     });
 });
