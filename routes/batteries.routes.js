@@ -9,7 +9,6 @@ router.post("/", (req, res) => {
       res.json(newBattery);
     })
     .catch((err) => {
-      console.log(err);
       res.json(err.errors);
     });
 });

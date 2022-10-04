@@ -154,9 +154,10 @@ router.delete("/logout", isLoggedIn, (req, res) => {
       res.status(200).json({ message: "User was logged out" });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({ errorMessage: err.message });
     });
 });
+
+
 
 module.exports = router;
