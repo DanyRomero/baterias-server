@@ -1,6 +1,28 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
+const addressSchema = new Schema({
+  addressOne: {
+    type:String,
+    required: true,
+  },
+  addressTwo: {
+    type:String,
+  },
+  zipCode:{
+    type: Number,
+    required: true,
+  },
+  town: {
+    type:String,
+    required: true,
+  },
+  state: {
+    type:String,
+    required: true,
+  },
+});
+
 const orderSchema = new Schema(
   {
     brand: { type: Schema.Types.ObjectId, ref: "Brand" },
@@ -8,8 +30,8 @@ const orderSchema = new Schema(
     year: { type: Schema.Types.ObjectId },
     battery: { type: Schema.Types.ObjectId, ref: "Battery" },
     client: { type: Schema.Types.ObjectId, ref: "Client" },
-    address: { type: String },
-    completedAt: { type: Date }
+    address: addressSchema,
+    completedAt: { type: Date },
   },
   { timestamps: true }
 );

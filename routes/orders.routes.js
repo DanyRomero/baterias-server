@@ -55,10 +55,27 @@ router.post("/:id/cliente", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  Order.find({ completedAt: { $ne: null } }).sort("completedAt")
+  Order.find({ completedAt: { $ne: null } })
+    .sort("completedAt")
     .populate(["brand", "battery", "client", "model", "year"])
     .then((orders) => res.json(orders))
     .catch((err) => {
+      res.status(422).json({ errors: err.errors });
+    });
+});
+
+router.post("/:orderId/direccion", (req, res) => {
+  const { orderId } = req.params;
+  Order.findById(orderId)
+    .then((order) => {
+      order.address = req.body;
+      return order.save();
+    })
+    .then((newOrder) => {
+      res.json(newOrder);
+    })
+    .catch((err) => {
+      console.error(err)
       res.status(422).json({ errors: err.errors });
     });
 });
