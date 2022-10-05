@@ -21,7 +21,7 @@ router.get("/:id", (req, res) => {
         path: "years.batteries",
       },
     })
-    .populate(["brand", "battery"])
+    .populate(["brand", "battery", "client"])
     .then((order) => res.json(order))
     .catch((err) => res.status(404).json({ error: "Not found" }));
 });
