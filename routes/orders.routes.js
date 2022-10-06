@@ -110,7 +110,7 @@ router.post("/:id/cliente", (req, res) => {
 
 router.get("/", (req, res) => {
   Order.find({ completedAt: { $ne: null } })
-    .sort("completedAt")
+    .sort({completedAt : -1})
     .populate(["brand", "battery", "client", "model", "year"])
     .then((orders) => res.json(orders))
     .catch((err) => {
