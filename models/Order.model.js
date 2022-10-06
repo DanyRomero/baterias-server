@@ -10,7 +10,7 @@ const addressSchema = new Schema({
     type:String,
   },
   zipCode:{
-    type: Number,
+    type: String,
     required: true,
   },
   town: {
