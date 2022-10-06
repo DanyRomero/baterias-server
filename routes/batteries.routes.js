@@ -33,8 +33,6 @@ router.delete("/:id", (req, res) => {
 
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const {price} =req.body;
-  console.log(typeof price)
   Battery.findByIdAndUpdate(id, req.body, { new: true })
     .then((battery) => {
       res.json(battery);
