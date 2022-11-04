@@ -2,15 +2,22 @@ const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
  
 const batterySchema = new Schema({
-  name: {
+  model: {
     type: String,
   },
-  model: {
+  brand: {
     type: String,
   },
   price:{
     type: Number
+  },
+  guarantee:{
+    type: Number
+  },
+  amps:{
+    type: Number
   }
+
 });
  
 module.exports = model('Battery', batterySchema);
