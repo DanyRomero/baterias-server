@@ -62,12 +62,13 @@ const sendEmail = (template_id, template_params) => {
 
 router.post("/:id/cliente", (req, res) => {
   const { id } = req.params;
-  Client.create(req.body)
+  const {client, deliverBattery} = req.body;
+  Client.create(client)
     .then((newClient) => {
       const now = new Date();
       return Order.findByIdAndUpdate(
         id,
-        { client: newClient, completedAt: now },
+        { client: newClient, deliverBattery, completedAt: now },
         { new: true }
       );
     })

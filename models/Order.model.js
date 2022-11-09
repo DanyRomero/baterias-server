@@ -33,6 +33,7 @@ const orderSchema = new Schema(
     address: addressSchema,
     deliveryType: { type: "String" },
     deliveryHour: {type: Date},
+    deliverBattery: {type: String},
     completedAt: { type: Date },
   },
   { timestamps: true }
