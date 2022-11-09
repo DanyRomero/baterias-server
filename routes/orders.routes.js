@@ -136,4 +136,20 @@ router.post("/:orderId/direccion", (req, res) => {
     });
 });
 
+
+router.post("/:orderId/horario", (req, res) => {
+  const { orderId } = req.params;
+  Order.findById(orderId)
+    .then((order) => {
+      order.deliveryHour= req.body.deliveryHour;
+      return order.save();
+    })
+    .then((newOrder) => { 
+      res.json(newOrder);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(422).json({ errors: err.errors });
+    });
+});
 module.exports = router;

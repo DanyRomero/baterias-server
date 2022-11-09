@@ -32,7 +32,7 @@ const orderSchema = new Schema(
     client: { type: Schema.Types.ObjectId, ref: "Client" },
     address: addressSchema,
     deliveryType: { type: "String" },
-    hour: {type: String},
+    deliveryHour: {type: Date},
     completedAt: { type: Date },
   },
   { timestamps: true }
