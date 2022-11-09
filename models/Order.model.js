@@ -3,22 +3,22 @@ const { Schema, model } = mongoose;
 
 const addressSchema = new Schema({
   addressOne: {
-    type:String,
+    type: String,
     required: true,
   },
   addressTwo: {
-    type:String,
+    type: String,
   },
-  zipCode:{
+  zipCode: {
     type: String,
     required: true,
   },
   town: {
-    type:String,
+    type: String,
     required: true,
   },
   state: {
-    type:String,
+    type: String,
     required: true,
   },
 });
@@ -31,6 +31,8 @@ const orderSchema = new Schema(
     battery: { type: Schema.Types.ObjectId, ref: "Battery" },
     client: { type: Schema.Types.ObjectId, ref: "Client" },
     address: addressSchema,
+    deliveryType: { type: "String" },
+    hour: {type: String},
     completedAt: { type: Date },
   },
   { timestamps: true }

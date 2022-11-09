@@ -122,10 +122,12 @@ router.post("/:orderId/direccion", (req, res) => {
   const { orderId } = req.params;
   Order.findById(orderId)
     .then((order) => {
-      order.address = req.body;
+      order.address = req.body.address;
+      order.deliveryType= req.body.deliveryType;
+     
       return order.save();
     })
-    .then((newOrder) => {
+    .then((newOrder) => { 
       res.json(newOrder);
     })
     .catch((err) => {
