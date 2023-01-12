@@ -35,6 +35,8 @@ app.use("/ordenes", orders);
 const users = require("./routes/users.routes");
 app.use("/usuarios", users);
 
+const batteryImports = require("./routes/battery-imports.routes");
+app.use("/importar-baterias", batteryImports);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

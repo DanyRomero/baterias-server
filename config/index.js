@@ -13,6 +13,8 @@ const cookieParser = require("cookie-parser");
 // unless the request if from the same domain, by default express wont accept POST requests
 const cors = require("cors");
 
+const fileUpload = require("express-fileupload");
+
 // Middleware configuration
 module.exports = (app) => {
   // Because this is a server that will accept requests from outside and it will be hosted ona server with a `proxy`, express needs to know that it should trust that setting.
@@ -32,4 +34,7 @@ module.exports = (app) => {
   // To have access to `body` property in the request
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+
+  // Support file uploads through req.files
+  app.use(fileUpload())
 };
