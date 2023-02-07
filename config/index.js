@@ -36,5 +36,5 @@ module.exports = (app) => {
   app.use(express.urlencoded({ extended: false }));
 
   // Support file uploads through req.files
-  app.use(fileUpload())
+  app.use(fileUpload({ useTempFiles: true }))
 };
