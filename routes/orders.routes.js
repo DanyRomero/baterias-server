@@ -62,7 +62,7 @@ const sendEmail = (template_id, template_params) => {
 
 router.post("/:id/cliente", (req, res) => {
   const { id } = req.params;
-  const {client, deliverBattery} = req.body;
+  const { client, deliverBattery } = req.body;
   Client.create(client)
     .then((newClient) => {
       const now = new Date();
@@ -100,7 +100,7 @@ router.post("/:id/cliente", (req, res) => {
         town: order.address.town,
         state: order.address.state,
       });
-      return order
+      return order;
     })
     .then((order) => res.json(order))
     .catch((err) => {
@@ -111,7 +111,7 @@ router.post("/:id/cliente", (req, res) => {
 
 router.get("/", (req, res) => {
   Order.find({ completedAt: { $ne: null } })
-    .sort({completedAt : -1})
+    .sort({ completedAt: -1 })
     .populate(["brand", "battery", "client", "model", "year"])
     .then((orders) => res.json(orders))
     .catch((err) => {
@@ -124,11 +124,11 @@ router.post("/:orderId/direccion", (req, res) => {
   Order.findById(orderId)
     .then((order) => {
       order.address = req.body.address;
-      order.deliveryType= req.body.deliveryType;
-     
+      order.deliveryType = req.body.deliveryType;
+
       return order.save();
     })
-    .then((newOrder) => { 
+    .then((newOrder) => {
       res.json(newOrder);
     })
     .catch((err) => {
@@ -137,15 +137,14 @@ router.post("/:orderId/direccion", (req, res) => {
     });
 });
 
-
 router.post("/:orderId/horario", (req, res) => {
   const { orderId } = req.params;
   Order.findById(orderId)
     .then((order) => {
-      order.deliveryHour= req.body.deliveryHour;
+      order.deliveryHour = req.body.deliveryHour;
       return order.save();
     })
-    .then((newOrder) => { 
+    .then((newOrder) => {
       res.json(newOrder);
     })
     .catch((err) => {

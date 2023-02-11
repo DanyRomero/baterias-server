@@ -17,7 +17,6 @@ const modelSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   years: [yearSchema],
   brand: { type: Schema.Types.ObjectId, ref: "Brand" },

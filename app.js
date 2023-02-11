@@ -38,6 +38,9 @@ app.use("/usuarios", users);
 const batteryImports = require("./routes/battery-imports.routes");
 app.use("/importar-baterias", batteryImports);
 
+const catalogImports = require("./routes/catalog-imports.routes");
+app.use("/importar-catalogo", catalogImports)
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
