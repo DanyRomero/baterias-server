@@ -22,12 +22,7 @@ router.post("/", (req, res) => {
       { $set: { name: row.model, brand: brand._id } },
       { upsert: true, new: true }
     );
-    const batteryIds = await Promise.all(
-      row.batteries.split("|").map(async (batteryModel) => {
-        const battery = await Battery.findOne({ model: batteryModel.trim() });
-        return battery._id;
-      })
-    );
+  
     
     const existingYear = model.years.find(
       (year) => year.from === Number(row.from) && year.to === Number(row.to)
