@@ -4,6 +4,14 @@ const axios = require("axios");
 const Client = require("../models/Client.model");
 const Order = require("../models/Order.model");
 
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API_KEY,
+});
+
 router.post("/", (req, res) => {
   Order.create(req.body)
     .then((order) => res.json(order))
@@ -35,31 +43,6 @@ router.put("/:id", (req, res) => {
     });
 });
 
-const sendEmail = (template_id, template_params) => {
-  const dataUser = {
-    service_id: process.env.SERVICE_ID,
-    template_id,
-    user_id: process.env.PUBLIC_KEY,
-    template_params,
-    accessToken: process.env.PRIVATE_KEY,
-  };
-  const url = "https://api.emailjs.com/api/v1.0/email/send";
-  axios({
-    method: "post",
-    url,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: JSON.stringify(dataUser),
-  })
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-
 router.post("/:id/cliente", (req, res) => {
   const { id } = req.params;
   const { client, deliverBattery } = req.body;
@@ -74,32 +57,28 @@ router.post("/:id/cliente", (req, res) => {
     })
     .then((order) => order.populate("battery"))
     .then((order) => {
-      sendEmail(process.env.TEMPLATE_ID_COMPRA, {
-        correoCliente: req.body.email,
-        name: req.body.name,
-        battery: order.battery.name,
-        model: order.battery.model,
-        price: order.battery.price,
-        address: order.address.addressOne,
-        address2: order.address.addressTwo,
-        zipcode: order.address.zipCode,
-        town: order.address.town,
-        state: order.address.state,
+      console.log({ client, order, req: req.body });
+      mg.messages.create("mg.distelub.com", {
+        from: "Distelub-Baterías <ventas@distelub.com>",
+        bcc: "mcecilia@distelub.com",
+        to: [client.email],
+        subject: "Distelub- La orden de tu batería está en proceso",
+        template: "order-confirmation",
+        "h:X-Mailgun-Variables": JSON.stringify({
+          client: client.name,
+          lastName: client.lastName,
+          clientEmail: client.email,
+          phone: client.phone,
+          model: order.battery.model,
+          price: order.battery.price,
+          address: order.address.addressOne,
+          address2: order.address.addressTwo,
+          zipcode: order.address.zipCode,
+          town: order.address.town,
+          state: order.address.state,
+        }),
       });
-      sendEmail(process.env.TEMPLATE_ID_ADMIN, {
-        client: req.body.name,
-        lastName: req.body.lastName,
-        clientEmail: req.body.email,
-        phone: req.body.phone,
-        battery: order.battery.name,
-        model: order.battery.model,
-        price: order.battery.price,
-        address: order.address.addressOne,
-        address2: order.address.addressTwo,
-        zipcode: order.address.zipCode,
-        town: order.address.town,
-        state: order.address.state,
-      });
+
       return order;
     })
     .then((order) => res.json(order))
