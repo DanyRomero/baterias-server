@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { parse } = require("csv-parse");
 const { createReadStream } = require("fs");
-const { modelName } = require("../models/Battery.model");
 const Battery = require("../models/Battery.model");
 const Brand = require("../models/Brand.model");
 const Model = require("../models/Model.model");
@@ -22,17 +21,18 @@ router.post("/", (req, res) => {
       { $set: { name: row.model, brand: brand._id } },
       { upsert: true, new: true }
     );
-    const batteryIds = await Promise.all(
+    let batteryIds = await Promise.all(
       row.batteries.split("|").map(async (batteryModel) => {
         const battery = await Battery.findOne({ model: batteryModel.trim() });
-        return battery._id;
+        return battery?._id;
       })
     );
-    
+    batteryIds = batteryIds.filter(Boolean);
+
     const existingYear = model.years.find(
       (year) => year.from === Number(row.from) && year.to === Number(row.to)
     );
-
+    
     if (existingYear) {
       existingYear.batteries = batteryIds;
     } else {
