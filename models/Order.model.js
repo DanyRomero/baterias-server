@@ -31,11 +31,15 @@ const orderSchema = new Schema(
     battery: { type: Schema.Types.ObjectId, ref: "Battery" },
     client: { type: Schema.Types.ObjectId, ref: "Client" },
     address: addressSchema,
-    deliveryType: { type: "String" },
+    deliveryType: { type: String },
     deliveryHour: {type: Date},
     deliverBattery: {type: String},
     completedAt: { type: Date },
     printedAt: {type: Date},
+    orderId: {type: Number, default: 0},
+    status: {type: String, default:'cotizacion' },
+    onTheWayAt: {type: Date},
+    instaledAt: {type: Date},
   },
   { timestamps: true }
 );

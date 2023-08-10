@@ -12,13 +12,13 @@ router.post("/", (req, res) => {
   const parser = parse({ columns: true });
   parser.on("data", async (row) => {
     const brand = await Brand.findOneAndUpdate(
-      { name: row.brand },
-      { $set: { brand: row.brand } },
+      { name: row.brand.trim() },
+      { $set: { brand: row.brand.trim() } },
       { upsert: true, new: true }
     );
     const model = await Model.findOneAndUpdate(
-      { name: row.model, brand: brand._id },
-      { $set: { name: row.model, brand: brand._id } },
+      { name: row.model.trim(), brand: brand._id },
+      { $set: { name: row.model.trim(), brand: brand._id } },
       { upsert: true, new: true }
     );
     let batteryIds = await Promise.all(

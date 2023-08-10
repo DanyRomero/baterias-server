@@ -46,42 +46,59 @@ router.put("/:id", (req, res) => {
 router.post("/:id/cliente", (req, res) => {
   const { id } = req.params;
   const { client, deliverBattery } = req.body;
-  Client.create(client)
-    .then((newClient) => {
-      const now = new Date();
-      return Order.findByIdAndUpdate(
-        id,
-        { client: newClient, deliverBattery, completedAt: now },
-        { new: true }
-      );
-    })
-    .then((order) => order.populate("battery"))
+  let newId;
+  Order.find()
+    .sort({ orderId: -1 })
+    .limit(1)
     .then((order) => {
-      console.log({ client, order, req: req.body });
-      mg.messages.create("mg.distelub.com", {
-        from: "Distelub-Baterías <ventas@distelub.com>",
-        bcc: "mcecilia@distelub.com",
-        to: [client.email],
-        subject: "Distelub- La orden de tu batería está en proceso",
-        template: "order-confirmation",
-        "h:X-Mailgun-Variables": JSON.stringify({
-          client: client.name,
-          lastName: client.lastName,
-          clientEmail: client.email,
-          phone: client.phone,
-          model: order.battery.model,
-          price: order.battery.price,
-          address: order.address.addressOne,
-          address2: order.address.addressTwo,
-          zipcode: order.address.zipCode,
-          town: order.address.town,
-          state: order.address.state,
-        }),
-      });
-
-      return order;
+      console.log({order})
+      newId = order[0].orderId + 1;
     })
-    .then((order) => res.json(order))
+    .then(
+      Client.create(client)
+        .then((newClient) => {
+          const now = new Date();
+
+          return Order.findByIdAndUpdate(
+            id,
+            {
+              client: newClient,
+              deliverBattery,
+              completedAt: now,
+              orderId: newId,
+              status: 'recibida',
+            },
+            { new: true }
+          );
+        })
+        .then((order) => order.populate("battery"))
+        .then((order) => {
+          
+          mg.messages.create("mg.distelub.com", {
+            from: "Distelub-Baterías <ventas@distelub.com>",
+            bcc: "mcecilia@distelub.com",
+            to: [client.email],
+            subject: "Distelub- La orden de tu batería está en proceso",
+            template: "order-confirmation",
+            "h:X-Mailgun-Variables": JSON.stringify({
+              client: client.name,
+              lastName: client.lastName,
+              clientEmail: client.email,
+              phone: client.phone,
+              model: order.battery.model,
+              price: order.battery.price,
+              address: order.address.addressOne,
+              address2: order.address.addressTwo,
+              zipcode: order.address.zipCode,
+              town: order.address.town,
+              state: order.address.state,
+            }),
+          });
+
+          return order;
+        })
+        .then((order) => res.json(order))
+    )
     .catch((err) => {
       console.log(err);
       res.status(422).json({ errors: err.errors });
