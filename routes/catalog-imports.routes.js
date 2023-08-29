@@ -11,6 +11,7 @@ router.post("/", (req, res) => {
   }
   const parser = parse({ columns: true });
   parser.on("data", async (row) => {
+    parser.pause();
     const brand = await Brand.findOneAndUpdate(
       { name: row.brand.trim() },
       { $set: { brand: row.brand.trim() } },
@@ -43,6 +44,7 @@ router.post("/", (req, res) => {
       });
     }
     await model.save();
+    parser.resume();
   });
 
   parser.on("end", () => {
